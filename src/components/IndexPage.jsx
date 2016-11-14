@@ -5,19 +5,16 @@ import React from 'react';
 import HeaderBar from './HeaderBar';
 import DashboardBox from './DashboardBox';
 
-import users from '../data/users';
-import widgets from '../data/widgets';
-
 export default class IndexPage extends React.Component {
     constructor(props) {
         super(props);
 
-        var p = props || this.props;
+        var p = props || this.props || {};
+        var initialState = p.initialState || {};
 
         this.state = this.state || {};
-        this.state.title = p && p.route && p.route.title || this.state.title;
-        this.state.users = users || [];
-        this.state.widgets = widgets || [];
+        this.state.users = initialState.users || [];
+        this.state.widgets = initialState.widgets || [];
     }
 
     render() {

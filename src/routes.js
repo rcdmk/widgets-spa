@@ -7,9 +7,9 @@ import Layout from './components/Layout';
 import IndexPage from './components/IndexPage';
 import NotFoundPage from './components/NotFoundPage';
 
-const routes = (
+const routes = (initialState) => (
     <Route path="/" component={Layout}>
-        <IndexRoute component={IndexPage} title="Dashboard" />
+        <IndexRoute component={(props) => (<IndexPage title="Dashboard" initialState={initialState} />)} />
         <Route path="*" component={NotFoundPage} />
     </Route>
 );
