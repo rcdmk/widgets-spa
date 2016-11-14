@@ -1,9 +1,12 @@
+/**
+ * Index route definition
+ */
 var express = require('express');
 var router = express.Router();
 
+var indexController = require('../controllers/indexController');
+
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index');
-});
+router.get('/', indexController.showDashboard);
 
 module.exports = router;
