@@ -31,3 +31,7 @@ npm-debug.log
 
 # Babel cache folder
 babel_cache
+
+# Compiled or Generated resources
+public/js/bundle*
+public/css/bundle*
