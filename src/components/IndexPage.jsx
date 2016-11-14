@@ -10,11 +10,21 @@ export default class IndexPage extends React.Component {
         super(props);
 
         var p = props || this.props || {};
-        var initialState = p.initialState || {};
 
+        // initial state
         this.state = this.state || {};
-        this.state.users = initialState.users || [];
-        this.state.widgets = initialState.widgets || [];
+        this.state.users = p.users || [];
+        this.state.widgets = p.widgets || [];
+
+        // needed to bind the current context
+        this.filterUsers = this.filterUsers.bind(this);
+    }
+
+    filterUsers() {
+        var searchString = this.refs.filterUsersInput.value;
+        var filteredUsers = this.props.users.filter((u, i) => u.name.toLowerCase().indexOf(searchString) >= 0);
+
+        this.setState({ users: filteredUsers });
     }
 
     render() {
@@ -23,8 +33,8 @@ export default class IndexPage extends React.Component {
                 <HeaderBar title={this.props.title} breadcrumb="Home / Dashboard" />
 
                 <div className="row">
-                    <DashboardBox name="Users" icon="users" count={this.state.users.length} url="/users" />
-                    <DashboardBox name="Widgets" icon="cubes" count={this.state.widgets.length} url="/widgets" />
+                    <DashboardBox name="Users" icon="users" count={this.props.users.length} url="/users" />
+                    <DashboardBox name="Widgets" icon="cubes" count={this.props.widgets.length} url="/widgets" />
                 </div>
 
                 <div className="row">
@@ -32,7 +42,7 @@ export default class IndexPage extends React.Component {
                     <div className="col-lg-6">
                         <div className="widget">
                             <div className="widget-header">Users
-                                <div className="pull-right"><input type="text" className="form-control input-sm" /></div>
+                                <div className="pull-right"><input type="text" className="form-control input-sm" ref="filterUsersInput" onChange={this.filterUsers} /></div>
                             </div>
                             <div className="table-responsive">
                                 <table className="table">
@@ -49,7 +59,7 @@ export default class IndexPage extends React.Component {
                                                 this.state.users.map(function (user, i) {
                                                     return (
                                                         <tr key={user.id}>
-                                                            <td className="text-center">{i + 1}</td>
+                                                            <td className="text-center">{user.id}</td>
                                                             <td>{user.name}</td>
                                                         </tr> 
                                                     );
@@ -85,7 +95,7 @@ export default class IndexPage extends React.Component {
                                                 this.state.widgets.map(function (widget, i) {
                                                     return (
                                                         <tr key={widget.id}>
-                                                            <td className="text-center">{i + 1}</td>
+                                                            <td className="text-center">{widget.id}</td>
                                                             <td>{widget.name}</td>
                                                         </tr> 
                                                     );

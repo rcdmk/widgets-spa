@@ -9,7 +9,7 @@ import NotFoundPage from './components/NotFoundPage';
 
 const routes = (initialState) => (
     <Route path="/" component={Layout}>
-        <IndexRoute component={(props) => (<IndexPage title="Dashboard" initialState={initialState} />)} />
+        <IndexRoute component={(props) => (<IndexPage title="Dashboard" users={initialState && initialState.users} widgets={initialState && initialState.widgets} />)} />
         <Route path="*" component={NotFoundPage} />
     </Route>
 );
