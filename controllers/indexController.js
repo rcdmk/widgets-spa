@@ -1,15 +1,17 @@
 /**
  * Index App resources definition
  */
-
 /* GET home page */
 function IndexController () {
+  var state = {};
+  var content = '';
+
   return {
     showDashboard: function showDashboard(req, res) {
       res.render('index', {
         title: 'Dashboard',
-        content: '',              // page content
-        state: JSON.stringify({}) // current app state
+        content: content,             // page content
+        state: JSON.stringify(state)  // current app state
       });
     }
   };
