@@ -7,6 +7,6 @@ var router = express.Router();
 var indexController = require('../controllers/indexController');
 
 /* GET home page. */
-router.get('/', indexController.showDashboard);
+router.get('*', indexController.showDashboard);
 
 module.exports = router;
