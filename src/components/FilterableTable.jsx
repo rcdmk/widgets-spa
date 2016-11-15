@@ -36,6 +36,9 @@ export default class FilterableTable extends React.Component {
                             <tr>
                                 <th className="text-center">ID</th>
                                 <th>Name</th>
+                                {
+                                    this.props && this.props.showImage && <th>Avatar</th>
+                                }
                             </tr>
                         </thead>
                         <tbody>
@@ -47,12 +50,15 @@ export default class FilterableTable extends React.Component {
                                             <tr key={item.id}>
                                                 <td className="text-center">{item.id}</td>
                                                 <td>{item.name}</td>
+                                                {
+                                                    this.props && this.props.showImage && <td><img src="{item.gravatar}" /></td>
+                                                }
                                             </tr> 
                                         );
                                     })
                                 : // else
                                     <tr>
-                                        <td colSpan="2">No records found!</td>
+                                        <td colSpan={this.props && this.props.showImage ? 3 : 2}>No records found!</td>
                                     </tr>
                             }
                         </tbody>

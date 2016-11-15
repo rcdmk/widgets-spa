@@ -7,15 +7,6 @@ import DashboardBox from './DashboardBox';
 import FilterableTable from './FilterableTable'
 
 export default class IndexPage extends React.Component {
-    constructor(props) {
-        super(props);
-
-        var p = props || this.props || {};
-
-        // initial state
-        this.state = this.state || {};
-    }
-
     render() {
         return (
             <div id="page-content">
@@ -27,7 +18,6 @@ export default class IndexPage extends React.Component {
                 </div>
 
                 <div className="row">
-
                     <div className="col-lg-6">
                         <FilterableTable title="Users" list={this.props.users} />
                     </div>
