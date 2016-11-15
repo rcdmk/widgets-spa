@@ -24,6 +24,18 @@ export default class FilterableTable extends React.Component {
         this.setState({ list: filteredList });
     }
 
+    renderImageHeader() {
+        if (this.props && this.props.showImage) {
+            return <th>Avatar</th>;
+        }
+    }
+
+    renderImageCel(url) {
+        if (this.props && this.props.showImage) {
+            return <td><img src={url} /></td>;
+        }
+    }
+
     render() {
         return (
             <div className="widget">
@@ -36,29 +48,24 @@ export default class FilterableTable extends React.Component {
                             <tr>
                                 <th className="text-center">ID</th>
                                 <th>Name</th>
-                                {
-                                    this.props && this.props.showImage && <th>Avatar</th>
-                                }
+                                {this.renderImageHeader()}
                             </tr>
                         </thead>
                         <tbody>
                             {
                                 // if
                                 this.state.list.length ?
-                                    this.state.list.map(function (item, i) {
-                                        return (
+                                    this.state.list.map((item, i) => (
                                             <tr key={item.id}>
                                                 <td className="text-center">{item.id}</td>
                                                 <td>{item.name}</td>
-                                                {
-                                                    this.props && this.props.showImage && <td><img src="{item.gravatar}" /></td>
-                                                }
-                                            </tr> 
-                                        );
-                                    })
+                                                {this.renderImageCel(item.gravatar)}
+                                            </tr>
+                                        )
+                                    )
                                 : // else
                                     <tr>
-                                        <td colSpan={this.props && this.props.showImage ? 3 : 2}>No records found!</td>
+                                        <td colSpan={this.props && this.props.showImage ? 3 : 2 }>No records found!</td>
                                     </tr>
                             }
                         </tbody>
