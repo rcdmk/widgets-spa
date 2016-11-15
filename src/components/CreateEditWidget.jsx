@@ -2,6 +2,7 @@
  * Create/Edit widget form definition
  */
 import React from 'react';
+import { _extend } from 'util';
 
 export default class CreateEditWidget extends React.Component {
     constructor(props) {
@@ -11,7 +12,9 @@ export default class CreateEditWidget extends React.Component {
 
         // initial state
         this.state = this.state || {};
-        this.state.widget = p.widget || {};
+        this.state.originalWidgetValues = p.widget || {};
+        this.state.widget = {};
+        _extend(this.state.widget, this.state.originalWidgetValues); // copy properties to lose refs
 
         // needed to bind context
         this.handleChangeInputs = this.handleChangeInputs.bind(this);
@@ -35,8 +38,8 @@ export default class CreateEditWidget extends React.Component {
         const widget = this.state.widget;
         const propName = this.mapInputNamesToProperties(input.name);
 
-        if (propName === 'melts') {
-            widget.melts = input.checked;
+        if (input.type === 'checkbox') {
+            widget[propName] = input.checked;
         } else {
             widget[propName] = input.value;
         }
@@ -47,7 +50,9 @@ export default class CreateEditWidget extends React.Component {
     saveWidget(e) {
         e.preventDefault();
         
-        this.props.onSaveForm(this.state.widget);
+        const widget = _extend(this.state.originalWidgetValues, this.state.widget);
+
+        this.props.onSaveForm(widget);
         this.closeForm(e);
     }
 

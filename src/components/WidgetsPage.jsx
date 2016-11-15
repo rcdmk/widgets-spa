@@ -31,21 +31,27 @@ export default class WidgetsPage extends React.Component {
         this.setState(newState);
     }
 
+    showEditForm(e, widget) {
+        const newState = {
+            create: false,
+            edit: true,
+            widgetToEdit: widget
+        };
+
+        this.setState(newState);
+    }
+
     onSaveForm(widget) {
         const newState = {
             widgets: this.state.widgets
         };
 
-        if (this.state.edit) {
-            this.state.widgets.forEach((w, i) => {
-                if (w.id == widget.id) {
-                    newState.widgets[i] = widget;
-                }
-            });
-        } else {
+        if (this.state.create) {
             widget.id = widget.id || newState.widgets.length + 1;
             newState.widgets.push(widget);
         }
+
+        this.setState(newState);
     }
 
     onCloseForm(e) {
@@ -82,7 +88,7 @@ export default class WidgetsPage extends React.Component {
                                             // if
                                             this.state.widgets ?
                                                 this.state.widgets.map((widget, i) => (
-                                                        <tr key={widget.id}>
+                                                        <tr key={widget.id} onDoubleClick={(e) => this.showEditForm(e, widget)}>
                                                             <td className="text-center">{widget.id}</td>
                                                             <td>{widget.name}</td>
                                                             <td>{widget.color}</td>
