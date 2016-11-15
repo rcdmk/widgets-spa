@@ -1,3 +1,8 @@
 /*
 Custom styles
 */
+ul.sidebar .sidebar-list a.active {
+  color: #fff;
+  border-left: 3px solid #e99d1a;
+  text-indent: 22px;
+}
