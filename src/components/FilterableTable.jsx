@@ -7,7 +7,7 @@ export default class FilterableTable extends React.Component {
     constructor(props) {
         super(props);
 
-        var p = props || this.props || {};
+        const p = props || this.props || {};
 
         // initial state
         this.state = this.state || {};
@@ -18,8 +18,8 @@ export default class FilterableTable extends React.Component {
     }
 
     filterRecords() {
-        var searchString = this.refs.filterInput.value;
-        var filteredList = this.props.list.filter((item, i) => item.name.toLowerCase().indexOf(searchString) >= 0);
+        const searchString = this.refs.filterInput.value;
+        const filteredList = this.props.list.filter((item, i) => item.name.toLowerCase().indexOf(searchString) >= 0);
 
         this.setState({ list: filteredList });
     }

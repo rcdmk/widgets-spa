@@ -9,11 +9,47 @@ export default class WidgetsPage extends React.Component {
     constructor(props) {
         super(props);
 
-        var p = props || this.props;
+        const p = props || this.props;
 
         this.state = this.state || {};
+        this.state.widgets = p.widgets || [];
         this.state.create = p.create || false;
         this.state.edit = p.edit || false;
+
+        // needed for binding context
+        this.showCreateForm = this.showCreateForm.bind(this);
+        this.onSaveForm = this.onSaveForm.bind(this);
+        this.onCloseForm = this.onCloseForm.bind(this);
+    }
+
+    showCreateForm(e) {
+        const newState = {
+            create: !this.state.create,
+            edit: false
+        };
+
+        this.setState(newState);
+    }
+
+    onSaveForm(widget) {
+        const newState = {
+            widgets: this.state.widgets
+        };
+
+        if (this.state.edit) {
+            this.state.widgets.forEach((w, i) => {
+                if (w.id == widget.id) {
+                    newState.widgets[i] = widget;
+                }
+            });
+        } else {
+            widget.id = widget.id || newState.widgets.length + 1;
+            newState.widgets.push(widget);
+        }
+    }
+
+    onCloseForm(e) {
+        this.setState({ create: false, edit: false, widgetToEdit: undefined });
     }
 
     render() {
@@ -26,7 +62,7 @@ export default class WidgetsPage extends React.Component {
                         <div className="widget">
                             <div className="widget-header">Widgets
                                 <div className="pull-right">
-                                    <button className="btn btn-sm btn-info">+ Create</button>
+                                    <button className="btn btn-sm btn-info" onClick={this.showCreateForm}>+ Create</button>
                                 </div>
                             </div>
                             <div className="table-responsive">
@@ -44,8 +80,8 @@ export default class WidgetsPage extends React.Component {
                                     <tbody>
                                         {
                                             // if
-                                            this.props.widgets ?
-                                                this.props.widgets.map((widget, i) => (
+                                            this.state.widgets ?
+                                                this.state.widgets.map((widget, i) => (
                                                         <tr key={widget.id}>
                                                             <td className="text-center">{widget.id}</td>
                                                             <td>{widget.name}</td>
@@ -70,17 +106,10 @@ export default class WidgetsPage extends React.Component {
                         </div>
                     </div>
                 </div>
-                <hr />
                 {
                     // if
-                    (this.state.create || this.state.edit) && (
-                            <div className="row">
-                                <div className="col-lg-12">
-                                    <CreateEditWidget widget={this.state.widgetToEdit} />
-                                </div>
-                            </div>
-                        )
-                    }
+                    (this.state.create || this.state.edit) && <CreateEditWidget widget={this.state.widgetToEdit} create={this.state.create} edit={this.state.edit} onSaveForm={this.onSaveForm} onCloseForm={this.onCloseForm} />
+                }
            </div>
         );
     }
