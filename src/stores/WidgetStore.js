@@ -1,5 +1,5 @@
 /**
- * FLUX users store
+ * FLUX widget store
  */
 import { EventEmitter } from 'events';
 import $ from 'jquery';
@@ -7,20 +7,20 @@ import AppDispatcher from '../AppDispatcher';
 import constants from '../constants';
 
 var _state = {
-    users: [],
-    usersCount: 0,
+    widgets: [],
+    widgetsCount: 0,
     message: '',
     loading: false
 };
 
 var _props = {
-    url: '/users/'
+    url: '/widgets/'
 };
 
-function searchUsers(searchString) {
+function searchWidgets(searchString) {
     return new Promise((resolve, reject) => {
         _state.loading = true;
-        UserStore.emit('loading:start');
+        WidgetStore.emit('loading:start');
 
         $.ajax({
             url: constants.configs.apiEndpoint + _props.url + '?searchString=' + searchString,
@@ -34,31 +34,31 @@ function searchUsers(searchString) {
     })
     .then((data) => {
         if (searchString) {
-            _state.users = data.filter((u, i) => u.name.toLowerCase().indexOf(searchString.toLowerCase()) >= 0);
+            _state.widgets = data.filter((u, i) => u.name.toLowerCase().indexOf(searchString.toLowerCase()) >= 0);
         } else {
-            _state.users = data;
+            _state.widgets = data;
         }
 
-        _state.usersCount = data.length;
+        _state.widgetsCount = data.length;
         _state.message = '';
         _state.loading = false;
 
-        UserStore.emit('loading:complete');
-        UserStore.emitChange();
+        WidgetStore.emit('loading:complete');
+        WidgetStore.emitChange();
    })
     .catch((err) => {
         _state.message = err.toString();
         _state.loading = false;
-        UserStore.emit('loading:error');
-        UserStore.emitChange();
+        WidgetStore.emit('loading:error');
+        WidgetStore.emitChange();
     });
 }
 
-function loadUsers() {
-    return searchUsers('');
+function loadWidgets() {
+    return searchWidgets('');
 }
 
-var UserStore = $.extend({}, EventEmitter.prototype, {
+var WidgetStore = $.extend({}, EventEmitter.prototype, {
     getState: function getState() {
         return _state;
     },
@@ -76,20 +76,20 @@ var UserStore = $.extend({}, EventEmitter.prototype, {
 
 AppDispatcher.register((action) => {
     switch(action.actionType) {
-        case constants.actions.USER_LIST:
-            loadUsers();
+        case constants.actions.WIDGET_LIST:
+            loadWidgets();
             break; 
 
-        case constants.actions.USER_SEARCH:
-            searchUsers(action.searchString);
+        case constants.actions.WIDGET_SEARCH:
+            searchWidgets(action.searchString);
             break; 
 
         default:
             return true;       
     }
 
-    UserStore.emitChange();
+    WidgetStore.emitChange();
     return true;
 });
 
-export default UserStore;
+export default WidgetStore;

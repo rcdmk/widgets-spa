@@ -11,15 +11,9 @@ import NotFoundPage from './components/NotFoundPage';
 
 const routes = (initialState) => (
     <Route path="/" component={Layout}>
-        <IndexRoute component={(props) => (
-            <IndexPage users={initialState && initialState.users} widgets={initialState && initialState.widgets} />
-        )} />
-        <Route path="/users" component={(props) => (
-            <UsersPage widgets={initialState && initialState.widgets} />
-        )} />
-        <Route path="/widgets" component={(props) => (
-            <WidgetsPage widgets={initialState && initialState.widgets} />
-        )} />
+        <IndexRoute component={IndexPage} />
+        <Route path="/users" component={UsersPage} />
+        <Route path="/widgets" component={WidgetsPage} />
         <Route path="*" component={NotFoundPage} />
     </Route>
 );

@@ -4,22 +4,26 @@
 import React from 'react';
 import HeaderBar from './HeaderBar';
 import CreateEditWidget from './CreateEditWidget';
+import WidgetActions from '../actions/WidgetActions';
+import WidgetStore from '../stores/WidgetStore';
 
 export default class WidgetsPage extends React.Component {
     constructor(props) {
         super(props);
 
-        const p = props || this.props;
+        this.state = WidgetStore.getState();
+        
+        WidgetActions.loadWidgets();
 
-        this.state = this.state || {};
-        this.state.widgets = p.widgets || [];
-        this.state.create = p.create || false;
-        this.state.edit = p.edit || false;
+        this.state.widgets = [];
+        this.state.create = false;
+        this.state.edit = false;
 
         // needed for binding context
         this.showCreateForm = this.showCreateForm.bind(this);
         this.onSaveForm = this.onSaveForm.bind(this);
         this.onCloseForm = this.onCloseForm.bind(this);
+        this._onChange = this._onChange.bind(this);
     }
 
     showCreateForm(e) {
@@ -58,10 +62,22 @@ export default class WidgetsPage extends React.Component {
         this.setState({ create: false, edit: false, widgetToEdit: undefined });
     }
 
+    _onChange() {
+        this.setState(WidgetStore.getState());
+    }
+
+    componentWillMount() {
+        WidgetStore.addChangeListener(this._onChange);
+    }
+
+    componentWillUnmount() {
+        WidgetStore.removeChangeListener(this._onChange);
+    }
+
     render() {
         return (
             <div className="page-content">
-                <HeaderBar title={this.props.title} breadcrumb="Home / Widgets" />
+                <HeaderBar title="Widgets" breadcrumb="Home / Widgets" />
 
                 <div className="row">
                     <div className="col-lg-12">
