@@ -1,3 +1,6 @@
+/**
+ * Users sample data
+ */
 var users = [
     {
         "name" : "Colin",

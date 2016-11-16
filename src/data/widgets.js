@@ -1,3 +1,6 @@
+/**
+ * Widgets sample data
+ */
 var widgets = [
     {
         "id" : 1,

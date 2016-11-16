@@ -11,27 +11,39 @@ export default class FilterableTable extends React.Component {
 
         // initial state
         this.state = this.state || {};
-        this.state.list = p.list || [];
+        this.state.searchString = "";
 
         // needed to bind the current context
         this.filterRecords = this.filterRecords.bind(this);
     }
 
-    filterRecords() {
-        const searchString = this.refs.filterInput.value;
-        const filteredList = this.props.list.filter((item, i) => item.name.toLowerCase().indexOf(searchString) >= 0);
+    static get propTypes() {
+        return {
+            onSearch: React.PropTypes.func.isRequired,
+            list: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
+        };
+    }
 
-        this.setState({ list: filteredList });
+    filterRecords() {
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
+
+        const searchString = this.refs.filterInput.value;
+        this.setState({ searchString: searchString });
+
+        // avoid pooling the server too much
+        this.interval = setTimeout(() => this.props.onSearch(searchString), 200);
     }
 
     renderImageHeader() {
-        if (this.props && this.props.showImage) {
+        if (this.props.showImage) {
             return <th>Avatar</th>;
         }
     }
 
     renderImageCel(url) {
-        if (this.props && this.props.showImage) {
+        if (this.props.showImage) {
             return <td><img src={url} /></td>;
         }
     }
@@ -40,7 +52,9 @@ export default class FilterableTable extends React.Component {
         return (
             <div className="widget">
                 <div className="widget-header">{this.props.title}
-                    <div className="pull-right"><input type="text" className="form-control input-sm" ref="filterInput" onChange={this.filterRecords} /></div>
+                    <div className="pull-right">
+                        <input type="text" className="form-control input-sm" ref="filterInput" value={this.state.searchString} onChange={this.filterRecords} />
+                    </div>
                 </div>
                 <div className="table-responsive">
                     <table className="table">
@@ -54,8 +68,8 @@ export default class FilterableTable extends React.Component {
                         <tbody>
                             {
                                 // if
-                                this.state.list.length ?
-                                    this.state.list.map((item, i) => (
+                                this.props.list.length ?
+                                    this.props.list.map((item, i) => (
                                             <tr key={item.id}>
                                                 <td className="text-center">{item.id}</td>
                                                 <td>{item.name}</td>
@@ -65,7 +79,7 @@ export default class FilterableTable extends React.Component {
                                     )
                                 : // else
                                     <tr>
-                                        <td colSpan={this.props && this.props.showImage ? 3 : 2 }>No records found!</td>
+                                        <td colSpan={this.props.showImage ? 3 : 2 }>No records found!</td>
                                     </tr>
                             }
                         </tbody>

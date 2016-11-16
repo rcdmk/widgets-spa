@@ -19,7 +19,7 @@ module.exports = {
             }
         ]
     },
-    // devtool: 'source-map',
+    devtool: 'source-map',
     plugins: [
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)

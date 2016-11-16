@@ -2,6 +2,7 @@
  * Dashboard count box widget definition
  */
 import React from 'react';
+import { Link } from 'react-router';
 
 export default class DashboardBox extends React.Component {
     render() {
@@ -10,7 +11,7 @@ export default class DashboardBox extends React.Component {
                 <div className="widget">
                     <div className="widget-header">
                         <div className="widget-icon green pull-left">
-                            <i className={`fa fa-${this.props.icon}`}></i>
+                            <Link to={this.props.url}><i className={`fa fa-${this.props.icon}`}></i></Link>
                         </div>
                         <div className="title">{`{${this.props.count}}`}</div>
                         <div className="comment">{this.props.name}</div>
