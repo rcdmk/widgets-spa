@@ -12,5 +12,7 @@ router.get('/', widgetsController.listWidgets);
 /* GET widget by id */
 router.get('/:id', widgetsController.getWidgetById);
 
+/* POST (create) widget */
+router.post('/', widgetsController.createWidget);
 
 module.exports = router;
