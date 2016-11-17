@@ -7,24 +7,26 @@ var usersModel = require('../../models/user');
 function UsersController() {
   return {
     listUsers: function listUsers(req, res) {
-      const users = usersModel.getUsers();
-
-      res.send(users);
+      usersModel.getAll()
+        .then((users) => res.send(users))
+        .catch((err) => res.sendStatus(500));
     },
     getUserById: function getUserById(req, res) {
       if (!req.params.id || isNaN(parseInt(req.params.id))) {
         return res.sendStatus(400);
       }
-      
+
       const id = req.params.id;
 
-      const user = usersModel.getById(id);
-
-      if (!user) {
-        res.sendStatus(404);
-      } else {
-        res.send(user);
-      }
+      usersModel.getById(id)
+        .then((user) => {
+          if (!user) {
+            res.sendStatus(404);
+          } else {
+            res.send(user);
+          }
+        })
+        .catch((err) => res.sendStatus(500));
     }
   };
 }

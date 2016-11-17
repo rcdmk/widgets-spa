@@ -6,11 +6,15 @@ var users = require('../src/data/users');
 module.exports = (function UserModel() {
     return {
         getAll: function getAllUsers() {
-            return users;
+            return new Promise((resolve, reject) => {
+            	setImmediate(() => resolve(users));
+            });
         },
 
         getById: function getUserById(id) {
-            return users.filter((u, i) => u.id == id)[0];
+            return new Promise((resolve, reject) => {
+            	setImmediate(() => resolve(users.filter((u, i) => u.id == id)[0]));
+            });
         }
     };
 })();

@@ -26,33 +26,46 @@ module.exports = (function WidgetModel() {
         },
 
         getAll: function getAllWidgets() {
-            return widgets;
+            return new Promise((resolve, reject) => {
+                setImmediate(() => resolve(widgets));
+            });
         },
 
         getById: function getWidgetById(id) {
-            return widgets.filter((w, i) => w.id == id)[0];
+            return new Promise((resolve, reject) => {
+                setImmediate(() => {
+                    const widget = widgets.filter((w, i) => w.id == id)[0];
+                    resolve(widget);
+                });
+            });
         },
 
         add: function addWidget(widget) {
-            widget.id = getNextId();
+            return new Promise((resolve, reject) => {
+                widget.id = getNextId();
 
-            widgets.push(widget);
+                widgets.push(widget);
 
-            return widget;
+                setImmediate(() => resolve(widget));
+            });
         },
 
         update: function updateWidget(widget) {
-            const widgetToEdit = this.getById(widget.id);
+            return new Promise((resolve, reject) => {
+                this.getById(widget.id)
+                    .then((widgetToEdit) => {
+                        if (widgetToEdit) {
+                            widgetToEdit.name = widget.name;
+                            widgetToEdit.color = widget.color;
+                            widgetToEdit.price = widget.price;
+                            widgetToEdit.melts = widget.melts;
+                            widgetToEdit.inventory = widget.inventory;
+                        }
 
-            if (widgetToEdit) {
-                widgetToEdit.name = widget.name;
-                widgetToEdit.color = widget.color;
-                widgetToEdit.price = widget.price;
-                widgetToEdit.melts = widget.melts;
-                widgetToEdit.inventory = widget.inventory;
-            }
-
-            return widgetToEdit;
+                        setImmediate(() => resolve(widgetToEdit));
+                    })
+                    .catch(reject);
+            });
         }
     };
 })();
