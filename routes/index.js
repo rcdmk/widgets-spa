@@ -9,4 +9,9 @@ var indexController = require('../controllers/indexController');
 /* GET home page. */
 router.get('*', indexController.showDashboard);
 
-module.exports = router;
+
+module.exports = {
+    register: function registerRoute(app) {
+        app.use('/', router);
+    }
+};

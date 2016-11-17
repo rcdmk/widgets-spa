@@ -1,14 +1,10 @@
 /**
- * API route definition
+ * API resources definition
  */
-var express = require('express');
-var router = express.Router();
+var usersRoutes = require('./api/users');
 
-var usersController = require('../controllers/api/usersController');
-
-/* GET users listing. */
-router.get('/users', usersController.listUsers);
-router.get('/users/:id', usersController.getUserById);
-
-
-module.exports = router;
+module.exports = {
+    register: function registerRoute(app) {
+        app.use('/api', usersRoutes);
+    }
+};

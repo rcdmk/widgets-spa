@@ -1,5 +1,5 @@
 /**
- * Users API resources definition
+ * Users API actions definition
  */
 var users = require('../../src/data/users');
 
