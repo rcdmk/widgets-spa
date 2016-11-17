@@ -1,12 +1,14 @@
 /**
  * Users API actions definition
  */
-var users = require('../../src/data/users');
+var usersModel = require('../../models/user');
 
 /* GET users listing */
 function UsersController() {
   return {
     listUsers: function listUsers(req, res) {
+      const users = usersModel.getUsers();
+
       res.send(users);
     },
     getUserById: function getUserById(req, res) {
@@ -16,7 +18,7 @@ function UsersController() {
       
       const id = req.params.id;
 
-      const user = users.filter((u, i) => u.id == id)[0];
+      const user = usersModel.getById(id);
 
       if (!user) {
         res.sendStatus(404);

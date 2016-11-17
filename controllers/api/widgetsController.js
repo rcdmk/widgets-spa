@@ -1,7 +1,7 @@
 /**
  * Widgets API actions definition
  */
-var widgets = require('../../src/data/widgets');
+var widgetsModel = require('../../models/widget');
 
 /* GET widgets listing */
 function WidgetsController() {
@@ -48,25 +48,10 @@ function WidgetsController() {
       return validationErrors.length === 0;
   }
 
-  function getNextId() {
-    const ids = widgets.map((w, i) => w.id);
-
-    return ids.reduce(function (p, v) {
-      return p > v ? p : v;
-    }) + 1;
-  }
-
-  function mapBodyToWidget(body, widget) {
-    widget.name = body.name;
-    widget.price = parseFloat(body.price).toFixed(2);
-    widget.color = body.color;
-    widget.melts = String(body.melts) === 'true';
-    widget.inventory = parseInt(body.inventory);
-  }
-
   // public
   return {
     listWidgets: function listWidgets(req, res) {
+      const widgets = widgetsModel.getAll();
       res.send(widgets);
     },
     
@@ -77,7 +62,7 @@ function WidgetsController() {
       
       const id = req.params.id;
 
-      const widget = widgets.filter((u, i) => u.id == id)[0];
+      const widget = widgetsModel.getById(id);
 
       if (!widget) {
         res.sendStatus(404);
@@ -95,13 +80,9 @@ function WidgetsController() {
         return res.status(422).send({ message: 'Validation errors', errors: validationErrors });
       }
 
-      const widget = {
-        id: getNextId() // simulate identity        
-      };
+      const widget = widgetsModel.mapObjectToWidget(req.body);
 
-      mapBodyToWidget(req.body, widget);
-
-      widgets.push(widget);
+      widgetsModel.add(widget);
 
       res.status(201).send(widget);
     },
@@ -117,13 +98,14 @@ function WidgetsController() {
       
       const id = req.params.id;
 
-      const widget = widgets.filter((u, i) => u.id == id)[0];
-
-      if (!widget) {
+      if (!widgetsModel.getById(id)) {
         return res.sendStatus(404);
       }
 
-      mapBodyToWidget(req.body, widget); // this "saves" the change directly, since it's a ref
+      const widget = widgetsModel.mapObjectToWidget(req.body);
+      widget.id = id;
+
+      widgetsModel.update(widget);
 
       res.send(widget);
     }
