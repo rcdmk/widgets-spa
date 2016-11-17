@@ -33,8 +33,6 @@ export default class CreateEditWidget extends React.Component {
         widget.inventory = this.refs['widget-count'].value;        
 
         this.setState({widget: widget});
-
-        return widget;
     }
 
     validateWidget(widget) {
@@ -65,7 +63,7 @@ export default class CreateEditWidget extends React.Component {
         e.preventDefault();
         
         this.loadWidgetValuesFromInputs();
-        const widget = $.extend(this.state.originalWidgetValues, this.state.widget);
+        const widget = this.state.widget;
 
         if (this.validateWidget(widget)) {
             this.props.onSaveForm(widget);

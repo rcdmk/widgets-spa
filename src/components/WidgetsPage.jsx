@@ -53,7 +53,7 @@ export default class WidgetsPage extends React.Component {
         if (this.state.create) {
             WidgetActions.createWidget(widget);
         } else {
-            // TODO: implement widget edit action
+            WidgetActions.editWidget(widget);
         }
     }
 
@@ -72,7 +72,7 @@ export default class WidgetsPage extends React.Component {
         const newState = {
             widgets: storeState.widgets,
             message: storeState.message,
-            error: !storeState.message
+            error: !!storeState.message
         };
 
         this.setState(newState);

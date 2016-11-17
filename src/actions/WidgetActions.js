@@ -24,6 +24,13 @@ class WidgetActions {
             widget: widget
         });
     }
+
+    static editWidget(widget) {
+        AppDispatcher.dispatch({
+            actionType: constants.actions.WIDGET_EDIT,
+            widget: widget
+        });
+    }
 }
 
 export default WidgetActions; 

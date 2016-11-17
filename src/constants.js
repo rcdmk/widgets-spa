@@ -3,13 +3,15 @@
  */
 export default {
     configs: {
-        apiEndpoint: 'http://spa.tglrw.com:4000'
+        // remote: http://spa.tglrw.com:4000, leave blank for local API server
+        apiEndpoint: 'http://spa.tglrw.com:4000',
     },
     actions: {
         USERS_LIST: 'USERS_LIST',
         USER_SEARCH: 'USER_SEARCH',
         WIDGET_LIST: 'WIDGET_LIST',
         WIDGET_SEARCH: 'WIDGET_SEARCH',
-        WIDGET_CREATE: 'WIDGET_CREATE'
+        WIDGET_CREATE: 'WIDGET_CREATE',
+        WIDGET_EDIT: 'WIDGET_EDIT'
     }
 }

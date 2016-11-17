@@ -59,14 +59,22 @@ function loadWidgets() {
     return searchWidgets('');
 }
 
-function createWidget(widget) {
+function saveWidget(widget, edit = false) {
     return new Promise((resolve, reject) => {
         _state.loading = true;
         WidgetStore.emit('loading:start');
 
+        let url = constants.configs.apiEndpoint + _props.url;
+        let method = 'POST';
+
+        if (edit) {
+            url += widget.id;
+            method = 'PUT';
+        }
+
         $.ajax({
-            url: constants.configs.apiEndpoint + _props.url,
-            type: 'POST',
+            url: url,
+            type: method,
             data: JSON.stringify(widget),
             // dataType: 'json', // remote API does not returns JSON on response
             contentType: 'application/json',
@@ -86,11 +94,19 @@ function createWidget(widget) {
         WidgetStore.emitChange();
    })
     .catch((err) => {
-        _state.message = (err && err.toString()) || 'Error creating widget!';
+        _state.message = (err && err.toString()) || 'Error on saving widget!';
         _state.loading = false;
         WidgetStore.emit('loading:error');
         WidgetStore.emitChange();
     });
+}
+
+function createWidget(widget) {
+    saveWidget(widget);
+}
+
+function editWidget(widget) {
+    saveWidget(widget, true);
 }
 
 var WidgetStore = $.extend({}, EventEmitter.prototype, {
@@ -121,6 +137,10 @@ AppDispatcher.register((action) => {
 
         case constants.actions.WIDGET_CREATE:
             createWidget(action.widget);
+            break;
+
+        case constants.actions.WIDGET_EDIT:
+            editWidget(action.widget);
             break;
 
         default:
