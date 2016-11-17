@@ -1,6 +1,5 @@
 # Widgets Single Page App Demo
-This is a simple multi-page HTML site. The goal of this project is to take this hardcoded HTML site, and make it hit an API for showing/listing user and widget information. 
-
+This is a SPA built with React on top of an Express.js server.
 
 ## Features
 - A user view that displays a list of users (data via api `/users`), each user should have a method of clicking to viewing all the details of that user (`/user/:id`)
@@ -11,7 +10,8 @@ This is a simple multi-page HTML site. The goal of this project is to take this 
 
 
 # API Documentation
-There's an API available at `http://spa.tglrw.com:4000` for retrieving the data used to make this app. The hard-coded data in the existing HTML is only a placeholder for style. The API returns and expects to receive JSON-encoded data.
+There RESTful API runs on the same server as the app available at `/api` for retrieving the data used to make this app.  
+There's also an API available at `http://spa.tglrw.com:4000`
 
 
 ## The endpoints are as follows:
@@ -21,4 +21,36 @@ There's an API available at `http://spa.tglrw.com:4000` for retrieving the data 
 - GET `/widgets/:id` [http://spa.tglrw.com:4000/widgets/:id](http://spa.tglrw.com:4000/widgets/:id)
 - POST `/widgets` for creating new widgets [http://spa.tglrw.com:4000/widgets](http://spa.tglrw.com:4000/widgets)
 - PUT `/widgets/:id` for updating existing widgets [http://spa.tglrw.com:4000/widgets/:id](http://spa.tglrw.com:4000/widgets/:id)
+
+
+# Setup
+As all npm managed projects, there is a need for installing all dependancies first.  
+Navigate to the repository root and run:
+
+    $ npm install 
+
+
+## Build the app
+In order to run this app, you will need to build it first:
+
+    $ npm run build
+
+This will build the react app source and generate the client JavaScript bundle.
+
+
+## Running the app
+To run the app, after building it:
+
+    $ npm start
+
+The app runs on `http://localhost:3000`.  
+The RESTful API lives on `http://localhost:3000/api`.
+
+
+# Future improvements (to come)
+- Implement middlewares for validation and security
+- Implement mongoose to operate on data from MongoDB
+- Unit tests
+- Implement a CI/CD cicle to run on heroku
+- Create an ASP.Net WebAPI version
 
