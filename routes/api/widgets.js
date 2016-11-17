@@ -15,4 +15,7 @@ router.get('/:id', widgetsController.getWidgetById);
 /* POST (create) widget */
 router.post('/', widgetsController.createWidget);
 
+/* PUT (edit) widget */
+router.put('/:id', widgetsController.editWidget);
+
 module.exports = router;

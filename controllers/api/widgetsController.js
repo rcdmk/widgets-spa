@@ -56,11 +56,20 @@ function WidgetsController() {
     }) + 1;
   }
 
+  function mapBodyToWidget(body, widget) {
+    widget.name = body.name;
+    widget.price = parseFloat(body.price).toFixed(2);
+    widget.color = body.color;
+    widget.melts = String(body.melts) === 'true';
+    widget.inventory = parseInt(body.inventory);
+  }
+
   // public
   return {
     listWidgets: function listWidgets(req, res) {
       res.send(widgets);
     },
+    
     getWidgetById: function getWidgetById(req, res) {
       if (!req.params.id || isNaN(parseInt(req.params.id))) {
         return res.sendStatus(400);
@@ -76,6 +85,7 @@ function WidgetsController() {
         res.send(widget);
       }
     },
+
     createWidget: function createWidget(req, res) {
       if (!req.body) {
         return res.sendStatus(400);
@@ -86,17 +96,36 @@ function WidgetsController() {
       }
 
       const widget = {
-        id: getNextId(), // simulate identity
-        name: req.body.name,
-        price: parseFloat(req.body.price).toFixed(2),
-        color: req.body.color,
-        melts: req.body.melts,
-        inventory: parseInt(req.body.inventory)
+        id: getNextId() // simulate identity        
       };
+
+      mapBodyToWidget(req.body, widget);
 
       widgets.push(widget);
 
       res.status(201).send(widget);
+    },
+
+    editWidget: function editWidget(req, res) {
+      if (!req.params.id || isNaN(parseInt(req.params.id)) || !req.body) {
+        return res.sendStatus(400);
+      }
+
+      if (!validateWidget(req.body)) {
+        return res.status(422).send({ message: 'Validation errors', errors: validationErrors });
+      }
+      
+      const id = req.params.id;
+
+      const widget = widgets.filter((u, i) => u.id == id)[0];
+
+      if (!widget) {
+        return res.sendStatus(404);
+      }
+
+      mapBodyToWidget(req.body, widget); // this "saves" the change directly, since it's a ref
+
+      res.send(widget);
     }
   };
 }
