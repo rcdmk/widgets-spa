@@ -24,6 +24,7 @@ function searchWidgets(searchString) {
 
         $.ajax({
             url: constants.configs.apiEndpoint + _props.url + '?searchString=' + searchString,
+            type: 'GET',
             dataType: 'json',
             cache: false,
             success: resolve,
@@ -47,7 +48,7 @@ function searchWidgets(searchString) {
         WidgetStore.emitChange();
    })
     .catch((err) => {
-        _state.message = err.toString();
+        _state.message = (err && err.toString()) || 'Error loading widgets!';
         _state.loading = false;
         WidgetStore.emit('loading:error');
         WidgetStore.emitChange();
@@ -56,6 +57,40 @@ function searchWidgets(searchString) {
 
 function loadWidgets() {
     return searchWidgets('');
+}
+
+function createWidget(widget) {
+    return new Promise((resolve, reject) => {
+        _state.loading = true;
+        WidgetStore.emit('loading:start');
+
+        $.ajax({
+            url: constants.configs.apiEndpoint + _props.url,
+            type: 'POST',
+            data: JSON.stringify(widget),
+            // dataType: 'json', // remote API does not returns JSON on response
+            contentType: 'application/json',
+            cache: false,
+            success: resolve,
+            error: function ajaxError(xhr, status, err) {                
+                reject(err);
+            }
+        });
+    })
+    .then((data) => {
+        _state.message = '';
+        _state.loading = false;
+        loadWidgets();
+
+        WidgetStore.emit('loading:complete');
+        WidgetStore.emitChange();
+   })
+    .catch((err) => {
+        _state.message = (err && err.toString()) || 'Error creating widget!';
+        _state.loading = false;
+        WidgetStore.emit('loading:error');
+        WidgetStore.emitChange();
+    });
 }
 
 var WidgetStore = $.extend({}, EventEmitter.prototype, {
@@ -83,6 +118,10 @@ AppDispatcher.register((action) => {
         case constants.actions.WIDGET_SEARCH:
             searchWidgets(action.searchString);
             break; 
+
+        case constants.actions.WIDGET_CREATE:
+            createWidget(action.widget);
+            break;
 
         default:
             return true;       

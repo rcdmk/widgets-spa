@@ -24,6 +24,7 @@ function searchUsers(searchString) {
 
         $.ajax({
             url: constants.configs.apiEndpoint + _props.url + '?searchString=' + searchString,
+            type: 'GET',
             dataType: 'json',
             cache: false,
             success: resolve,
@@ -47,7 +48,7 @@ function searchUsers(searchString) {
         UserStore.emitChange();
    })
     .catch((err) => {
-        _state.message = err.toString();
+        _state.message = (err && err.toString()) || 'Error loading users!';
         _state.loading = false;
         UserStore.emit('loading:error');
         UserStore.emitChange();

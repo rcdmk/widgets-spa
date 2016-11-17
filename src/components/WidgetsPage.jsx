@@ -12,12 +12,11 @@ export default class WidgetsPage extends React.Component {
         super(props);
 
         this.state = WidgetStore.getState();
-        
-        WidgetActions.loadWidgets();
-
-        this.state.widgets = [];
+        this.state.error = false;
         this.state.create = false;
         this.state.edit = false;
+        
+        WidgetActions.loadWidgets();
 
         // needed for binding context
         this.showCreateForm = this.showCreateForm.bind(this);
@@ -28,8 +27,11 @@ export default class WidgetsPage extends React.Component {
 
     showCreateForm(e) {
         const newState = {
-            create: !this.state.create,
-            edit: false
+            create: true,
+            edit: false,
+            message: '',
+            error: false,
+            widgetToEdit: undefined
         };
 
         this.setState(newState);
@@ -39,6 +41,8 @@ export default class WidgetsPage extends React.Component {
         const newState = {
             create: false,
             edit: true,
+            message: '',
+            error: false,
             widgetToEdit: widget
         };
 
@@ -46,24 +50,32 @@ export default class WidgetsPage extends React.Component {
     }
 
     onSaveForm(widget) {
-        const newState = {
-            widgets: this.state.widgets
-        };
-
         if (this.state.create) {
-            widget.id = widget.id || newState.widgets.length + 1;
-            newState.widgets.push(widget);
+            WidgetActions.createWidget(widget);
+        } else {
+            // TODO: implement widget edit action
         }
-
-        this.setState(newState);
     }
 
     onCloseForm(e) {
-        this.setState({ create: false, edit: false, widgetToEdit: undefined });
+        const newState = {
+            create: false,
+            edit: false,
+            widgetToEdit: undefined
+        };
+
+      this.setState(newState);
     }
 
     _onChange() {
-        this.setState(WidgetStore.getState());
+        const storeState = WidgetStore.getState();
+        const newState = {
+            widgets: storeState.widgets,
+            message: storeState.message,
+            error: !storeState.message
+        };
+
+        this.setState(newState);
     }
 
     componentWillMount() {
@@ -78,7 +90,16 @@ export default class WidgetsPage extends React.Component {
         return (
             <div className="page-content">
                 <HeaderBar title="Widgets" breadcrumb="Home / Widgets" />
-
+                {
+                    // if
+                    this.state.message && (
+                        <div className="row">
+                            <div className="col-lg-12">
+                                <div className={`alert alert-${this.state.error ? 'danger' : 'success'}`}><i className="fa fa-exclamation-circle"></i> {this.state.message}</div>
+                            </div>
+                        </div>
+                    )
+                }
                 <div className="row">
                     <div className="col-lg-12">
                         <div className="widget">

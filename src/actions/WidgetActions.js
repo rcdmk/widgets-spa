@@ -15,7 +15,14 @@ class WidgetActions {
         AppDispatcher.dispatch({
             actionType: constants.actions.WIDGET_SEARCH,
             searchString: searchString
-        })
+        });
+    }
+
+    static createWidget(widget) {
+        AppDispatcher.dispatch({
+            actionType: constants.actions.WIDGET_CREATE,
+            widget: widget
+        });
     }
 }
 

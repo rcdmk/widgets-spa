@@ -15,7 +15,7 @@ class UserActions {
         AppDispatcher.dispatch({
             actionType: constants.actions.USER_SEARCH,
             searchString: searchString
-        })
+        });
     }
 }
 
