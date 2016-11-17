@@ -3,8 +3,8 @@
  */
 export default {
     configs: {
-        // remote: http://spa.tglrw.com:4000, leave blank for local API server
-        apiEndpoint: 'http://spa.tglrw.com:4000',
+        // remote: "http://spa.tglrw.com:4000", local: "/api"
+        apiEndpoint: '/api',
     },
     actions: {
         USERS_LIST: 'USERS_LIST',
