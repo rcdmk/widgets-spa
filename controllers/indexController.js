@@ -1,16 +1,10 @@
 /**
  * Index App resources definition
  */
-const users = require('../src/data/users');
-const widgets = require('../src/data/widgets');
-
 /* GET home page */
 function IndexController () {
-  var state = {
-    users: users,
-    widgets: widgets
-  };
-  
+  var state = {};
+
   var content = '';
 
   return {
